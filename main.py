@@ -56,7 +56,7 @@ SHOW_DEBUG = True
 
 def process_frame(frame, pose_detector):
     """
-    Iz jednog framea gradi detections i debug_data.
+    Builds detections and debug data from one frame using YOLO model.
     """
 
     detections = []
@@ -147,17 +147,15 @@ def process_frame(frame, pose_detector):
 
 def run_multi():
     '''
-    Pokreće multi-view pipeline nad dvije sinkronizirane video snimke.
-
-    Za svaki frame oba viewa:
-        1. Izvršava preprocessing.
-        2. Izvršava pose detekciju i ekstrakciju glove featurea.
-        3. Ažurira dva nezavisna lokalna Trackera.
-        4. GlobalIdentityResolver povezuje njihove lokalne identitete.
-        5. MultiViewIdentityEvaluator ažurira evaluacijske metrike.
-        6. Po potrebi se prikazuje multi-view debug vizualizacija.
-
-    Obrada prestaje kada završi bilo koja od dvije snimke.
+    Runs multi-view pipeline over two syncronized sparring videos.
+    For every frame of every view:
+        1. Runs single view pipeline
+        2. GlobalIdentityResolver conneccts local identities
+        3. If EVALUATE is enabled, MultiViewIdentityEvaluator 
+           updates evaluation metrics
+        4. If SHOW_DEBUG is enabled, system analysis is vizaualized.
+        
+    Processing stops when any of the two videos ends.
     '''
     
     cap0 = cv2.VideoCapture(VIDEO_PATH_MULTI[0])
@@ -240,8 +238,6 @@ def run_multi():
                 break
 
         frame_idx += 1
-        if frame_idx == 5100: break # radi evaluacije samo na prvih 5100 frameova, jer je to dovoljno za evaluaciju
-
 
     if EVALUATE:
         multi_eval.finalize()
@@ -319,8 +315,6 @@ def run_single():
                 break
 
         frame_idx += 1
-        if frame_idx == 5100: break # radi evaluacije samo na prvih 5100 frameova, jer je to dovoljno za evaluaciju
-
 
     if EVALUATE:
         id_eval.finalize()
