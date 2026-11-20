@@ -147,7 +147,7 @@ def process_frame(frame, pose_detector):
 
 def run_multi():
     '''
-    Runs multi-view pipeline over two syncronized sparring videos.
+    Executes multi-view pipeline over two syncronized sparring videos.
     For every frame of every view:
         1. Runs single view pipeline
         2. GlobalIdentityResolver conneccts local identities
@@ -254,16 +254,14 @@ def run_multi():
 
 def run_single():
     '''
-    Pokreće single-view tracking pipeline.
+    Executes single-view tracking pipeline.
 
-    Za svaki frame:
-        1. Izvršava preprocessing.
-        2. Izvršava pose detekciju i ekstrakciju glove featurea.
-        3. Ažurira lokalni Tracker.
-        4. Po potrebi ažurira evaluacijske metrike.
-        5. Prikazuje debug vizualizaciju.
-
-    Na kraju videa ispisuje rezultate single-view evaluacije.
+    For every frame:
+       1. Runs image preprocessing
+       2. Runs pose detection annd glove feature extracction
+       3. Updates local tracker
+       4. If EVALUATE is enabled, runs evaluation metrics and prints the reasults in terminal
+       5. If SHOW_DEBUG is enabled, system analysis is vizaualized.
     '''
 
     cap = cv2.VideoCapture(VIDEO_PATH_SINGLE)
